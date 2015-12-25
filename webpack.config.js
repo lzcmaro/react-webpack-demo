@@ -1,27 +1,43 @@
-webpack = require('webpack');
+var webpack = require('webpack');
+
 module.exports = {
-  entry:[
-    'webpack-dev-server/client?http://127.0.0.1:3000', // WebpackDevServer host and port
-    'webpack/hot/only-dev-server',
-    './src/js/entry' // entry point
-  ],
+  entry: './src/entry',
+  output: {
+    path: './assets',
+    filename: 'bundle.js'
+  },
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
   module: {
     loaders: [
-      {test: /\.css$/, loader: 'style-loader!css-loader'},
-      {test: /\.sass$/, loader: 'style-loader!css-loader!sass-loader'},
-      {test: /\.(js|jsx)$/, exclude: /node_modules/, include: __dirname, loader: 'react-hot!babel-loader?stage=0'}, //react-hot! 
-      {test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'} // inline base64 URLs for <=8k images, direct URLs for the rest
+      {test: /\.sass$|\.scss$/, loader: 'style-loader!css-loader!sass-loader'},
+      {test: /\.(js|jsx)$/, exclude: /node_modules/, include: __dirname, loader: 'react-hot!babel-loader?stage=0'}
     ]
-  },
-  output: {
-    publicPath: '/assets',
-    path: __dirname + '/assets/',
-    filename: 'main.js'
-  },
+  }, 
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     'NODE_ENV': JSON.stringify('production')
+    //   }
+    // })
+  ],
+  externals: [
+    {
+      'react': {
+        root: 'React',
+        commonjs2: 'react',
+        commonjs: 'react',
+        amd: 'react'
+      }
+    },
+    {
+      'react-dom': {
+        root: 'ReactDOM',
+        commonjs2: 'react-dom',
+        commonjs: 'react-dom',
+        amd: 'react-dom'
+      }
+    }
   ]
 };

@@ -1,32 +1,27 @@
-webpack = require('webpack');
+var webpack = require('webpack');
+var path = require('path');
+
 module.exports = {
   entry:[
-    'webpack-dev-server/client?http://127.0.0.1:3000', // WebpackDevServer host and port
-    'webpack/hot/only-dev-server',
-    './src/js/entry' // entry point
+    'webpack-dev-server/client?http://127.0.0.1:2000', // WebpackDevServer host and port
+    'webpack/hot/dev-server',
+    path.resolve(__dirname, 'examples/app.js') // entry point
   ],
+  output: {
+    // publicPath: '/',
+    path: path.resolve(__dirname, 'examples'),
+    filename: 'bundle.js'
+  },
   resolve: {
-    extensions: ['', '.js']
+    extensions: ['', '.js', '.jsx']
   },
   module: {
     loaders: [
-      {test: /\.css$/, loader: 'style-loader!css-loader'},
-      {test: /\.sass$/, loader: 'style-loader!css-loader!sass-loader'},
-      {test: /\.(js|jsx)$/, exclude: /node_modules/, loader: 'react-hot!babel-loader?stage=0'}, //react-hot! 
-      {test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'} // inline base64 URLs for <=8k images, direct URLs for the rest
+      {test: /\.sass$|\.scss$/, loader: 'style-loader!css-loader!sass-loader'},
+      {test: /\.(js|jsx)$/, exclude: /node_modules/, include: __dirname, loader: 'react-hot!babel-loader?stage=0'}
     ]
-  },
-  output: {
-    publicPath: 'http://127.0.0.1:3000/assets',
-    path: __dirname + '/assets/',
-    filename: 'main.js'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin()
-    // ,new webpack.DefinePlugin({
-    //   "process.env": {
-    //     NODE_ENV: JSON.stringify("production")
-    //   }
-    // })
   ]
 };
